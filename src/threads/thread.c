@@ -737,4 +737,3 @@ void thread_release_donation (struct lock *lock) {
   /* call thread_update_priority on the current thread */
   thread_update_priority (curr);
 }
-
