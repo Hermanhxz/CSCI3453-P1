@@ -395,4 +395,3 @@ static bool sema_waiter_lower_priority (const struct list_elem *a,
 
   return ta->priority < tb->priority;
 }
-
