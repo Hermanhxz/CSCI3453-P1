@@ -143,8 +143,7 @@ thread_tick (void)
 void
 thread_print_stats (void) 
 {
-  printf ("Thread: %lld idle ticks, %lld kernel ticks, %lld user ticks\n",
-          idle_ticks, kernel_ticks, user_ticks);
+  printf ("Thread: %lld idle ticks, %lld kernel ticks, %lld user ticks\n", idle_ticks, kernel_ticks, user_ticks);
 }
 
 /* Creates a new kernel thread named NAME with the given initial
@@ -265,7 +264,6 @@ thread_current (void)
      recursion can cause stack overflow. */
   ASSERT (is_thread (t));
   ASSERT (t->status == THREAD_RUNNING);
-
   return t;
 }
 
@@ -321,9 +319,7 @@ void thread_priority_yield (void) {
   enum intr_level old_level = intr_disable ();
   if (!list_empty (&ready_list)) {
     struct thread *curr = thread_current ();
-    struct thread *max  = list_entry (list_max (&ready_list,
-                                                lower_priority, NULL),
-                                      struct thread, elem);
+    struct thread *max  = list_entry (list_max (&ready_list, lower_priority, NULL), struct thread, elem);
     if (max->priority > curr->priority) {
        if (intr_context ()) {
          intr_yield_on_return ();
@@ -534,9 +530,7 @@ next_thread_to_run (void)
   else
    {
 /*     return list_entry (list_pop_front (&ready_list), struct thread, elem); */
-     struct thread *max = list_entry (
-                               list_max (&ready_list, lower_priority, NULL),
-                               struct thread, elem); /* P1-2 */
+     struct thread *max = list_entry (list_max (&ready_list, lower_priority, NULL), struct thread, elem); /* P1-2 */
      /* Note: list_remove returns the following element
         which can be tail, so the following is incorrect
         list_entry (list_remove (list_max (...))) and is
@@ -641,36 +635,25 @@ uint32_t thread_stack_ofs = offsetof (struct thread, stack);
 
 /* P1-1 */
 /* 1. define list_less_func for absolute thread wakeup times in ticks */
-bool earlier_wakeup(const struct list_elem *a,
-                    const struct list_elem *b,
-                    void *aux UNUSED) {
+bool earlier_wakeup(const struct list_elem *a, const struct list_elem *b, void *aux UNUSED) {
   struct thread *ta = list_entry(a, struct thread, time_elem);
   struct thread *tb = list_entry(b, struct thread, time_elem);
-
   return ta->wakeup_ticks < tb->wakeup_ticks;
 }
 
 /* P1-2 */
 /* thread comparison function for _priority scheduling */
-bool lower_priority(const struct list_elem *a,
-                    const struct list_elem *b,
-                    void *aux UNUSED) {
+bool lower_priority(const struct list_elem *a, const struct list_elem *b, void *aux UNUSED) {
   struct thread *ta = list_entry (a, struct thread, elem);
   struct thread *tb = list_entry (b, struct thread, elem);
-
-
   return ta->priority < tb->priority;
 }
 
 /* P1-2 */
 /* thread comparison function for _priority scheduling */
-static bool donor_lower_priority(const struct list_elem *a,
-                    const struct list_elem *b,
-                    void *aux UNUSED) {
+static bool donor_lower_priority(const struct list_elem *a, const struct list_elem *b, void *aux UNUSED) {
   struct thread *ta = list_entry (a, struct thread, donor_elem);
   struct thread *tb = list_entry (b, struct thread, donor_elem);
-
-
   return ta->priority < tb->priority;
 }
 
@@ -703,8 +686,7 @@ void thread_update_priority (struct thread *t) {
   } else {
     /* set to the highest remaining donated priority */
     struct thread *max =
-      list_entry (list_max (&t->donor_list, donor_lower_priority, NULL),
-                  struct thread, donor_elem);
+      list_entry (list_max (&t->donor_list, donor_lower_priority, NULL), struct thread, donor_elem);
     t->priority = max->priority;
   }
   /* If t is itself blocking on a lock, cascade donation through the locks. */
